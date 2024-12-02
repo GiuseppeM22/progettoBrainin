@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- link google font per font Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anta&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@1,300&family=Roboto:wght@100&family=Source+Code+Pro:wght@700&family=Teko:wght@300..700&display=swap" rel="stylesheet">
+    <!-- link fontawesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- link cdn per vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="../js/script.js" defer ></script>
+    <title>Brainin</title>
+</head>
+<body>
+
+    <div id="app">
+        <!-- loader -->
+        <div v-if="loading" class="loading-indicator">
+            <div class="spinner"></div>
+          </div>
+
+        <div class="container">
+
+            <!-- lato sinistro della pagina di login -->
+            <div class="leftSide"></div>
+
+            <!-- lato destro della pagina di login -->
+            <div class="rightSide">
+                <nav>
+                    <!-- lato sinistro della navbar -->
+                        <img src="https://demo.soluzionefad.it/public/images/core/demo//login/logo.png" alt="logo">
+                   
+                     <!-- lato destro della navbar -->
+                        <a @click="activeteLoading" href="../html/login.html"> Login › </a>
+                </nav>
+
+                <main>
+                    <form @submit.prevent="registerUser" class="loginForm" method="POST">
+                        <div >
+                            <!-- titolo e sottotitolo -->
+                            <span class="title remB1">Registrati</span>
+                            <span class="subTitle remB2">Inserisci i tuoi dati e crea il tuo account</span>
+                    
+                            <!-- input registrazione -->
+                            <div class="containerInputRegistration">
+                                <!-- nome -->
+                                <div class="inputRegistration remB1 remB1">
+                                    <div class="remB05">
+                                        <span class="orangeCircle"></span>
+                                        <label for="name">Nome</label>
+                                    </div>
+                                    <input type="text" name="name" id="name" v-model="formData.name" required>
+                                </div>
+                                <!-- cognome -->
+                                <div class="inputRegistration remB1 notRem">
+                                    <div class="remB05">
+                                        <span class="orangeCircle"></span>
+                                        <label for="cognome">Cognome</label>
+                                    </div>
+                                    <input type="text" name="cognome" id="cognome" v-model="formData.surname" required>
+                                </div>
+                                <!-- E-mail di accesso -->
+                                <div class="inputRegistration remB1">
+                                    <div class="remB05">
+                                        <span class="orangeCircle"></span>
+                                        <label for="email">E-mail di accesso</label>
+                                    </div>
+                                    <input type="email" name="email" id="email" v-model="formData.email" required>
+                                </div>
+                                <!-- Recapito telefonico -->
+                                <div class="inputRegistration remB1 notRem">
+                                    <div class="remB05">
+                                        <span class="orangeCircle"></span>
+                                        <label for="phone">Recapito telefonico</label>
+                                    </div>
+                                    <input type="tel" name="phone" id="phone" pattern="[0-9]*" v-model="formData.phone" required>
+                                </div>
+                                <!-- password -->
+                                <div class="inputRegistration remB1">
+                                    <div class="remB05">
+                                        <span class="orangeCircle"></span>
+                                        <label for="password">Password</label>
+                                    </div>
+                                    <input v-model="formData.password" :type="passwordVisible ? 'text' : 'password'" name="password" id="password" required>
+                                    <span v-if="formData.password.length > 0" class="eyesPassword" @click="togglePassword"><i class="fa-regular fa-eye-slash"></i></span>
+                                </div>
+                                <!-- conferma password -->
+                                <div class="inputRegistration remB1 notRem">
+                                    <div class="remB05">
+                                        <span class="orangeCircle"></span>
+                                        <label for="confirmPassword">Conferma password</label>
+                                    </div>
+                                    <input v-model="formData.confirmPassword" :type="passwordVisible ? 'text' : 'password'" name="confirmPassword" id="confirmPassword" required>
+                                    <span v-if="formData.confirmPassword.length > 0" class="eyesPassword" @click="togglePassword"><i class="fa-regular fa-eye-slash"></i></span>
+                                </div>
+                                <!-- messaggio cotrollo caratteri password -->
+                                <div v-if="passwordError" style="color: red; margin-bottom: 1rem; font-size: 13px;">
+                                    {{passwordError}}
+                                 </div>
+                            </div>
+                            <!-- errore per password non corrispondenti -->
+                            <div v-if="formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword" style="color: red; margin-bottom: 1rem; font-size: 13px;">
+                                Le password non corrispondono!
+                            </div>
+                    
+                            <!-- checkbox personalizzata -->
+                            <div class="remember">
+                                <label class="remB3 custom-checkbox">
+                                    <input type="checkbox" v-model="formData.termsAccepted" name="termsAccepted">
+                                    <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                                    Accetto i <a class="termsLinkRegistration" href="">termini e condizioni</a> della piattaforma
+                                </label>
+                            </div>
+                            <!-- errore se email gia presente nel db -->
+                            <div v-if="emailPresent != null" style="color: red; margin-bottom: 1rem; font-size: 13px;">
+                                {{emailPresent}}
+                            </div>
+                            <!-- errore per i termini non accettati -->
+                            <div v-if="formSubmitted && !formData.termsAccepted" style="color: red; margin-bottom: 1rem; font-size: 13px;">
+                               accettare i termini per proseguire
+                            </div>
+
+                            <div v-if="successRegistration != null" style="color: green; margin-bottom: 1rem; font-size: 13px;">
+                                {{successRegistration }}
+                             </div>
+
+                            <button :disabled="formData.password !== formData.confirmPassword" type="submit" class="submitButton remB3">Registrati ›</button>
+                        
+                        </div>
+                    </form>                    
+                </main>
+
+                <footer>
+                    <div class="reservedRights">
+                        <span>Tutti i diritti riservati • Demo Soluzione FAD 2024
+                            • by <a href="https://soluzionefad.it/">Soluzione FAD</a></span>
+                    </div>
+
+                    <div class="footerList">
+                        <a href="https://demo.soluzionefad.it/contatti">Contatti</a>
+                        <a href="https://demo.soluzionefad.it/privacy">Privacy</a>
+                        <a href="https://guida.soluzionefad.it/guida-utente">Vai alla guida</a>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+</html>

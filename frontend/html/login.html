@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- link google font per font Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anta&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@1,300&family=Roboto:wght@100&family=Source+Code+Pro:wght@700&family=Teko:wght@300..700&display=swap" rel="stylesheet">
+    <!-- link fontawesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- link cdn per vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="../js/script.js" defer></script>
+    <title>Brainin</title>
+</head>
+<body>
+
+    <div id="app">
+        <div class="container">
+
+            <!-- lato sinistro della pagina di login -->
+            <div class="leftSide"></div>
+
+            <!-- lato destro della pagina di login -->
+            <div class="rightSide">
+                <nav>
+                    <!-- lato sinistro della navbar -->
+                        <img src="https://demo.soluzionefad.it/public/images/core/demo//login/logo.png" alt="">
+                   
+                     <!-- lato destro della navbar -->
+                        <a @click="activeteLoading" href="../html/register.html"> Registrati › </a>
+                </nav>
+
+                <main>
+                    <form @submit.prevent="handleLogin" method="POST">
+                        <div class="loginForm">
+                            <!-- titolo e sottotitolo -->
+                            <span class="title remB1">Accedi ai corsi</span>
+                            <span class="subTitle remB2">Inserisci i tuoi dati per accedere</span>
+                            <!-- input email e password -->
+                            <input v-model="loginForm.email" class="remB1" type="email" name="email" id="email" placeholder="Email dell'account">
+                            <input v-model="loginForm.password" class="remB05" type="password" name="password" id="password" placeholder="Password">
+                            <span class="rememberLink remB2">Non ricordi la password? <a href="">Recuperala qui › </a></span>
+                            <!-- checkbox personalizzata -->
+                            <div class="remember">
+                                <label class="remB2 custom-checkbox">
+                                    <input type="checkbox">
+                                    <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                                    Ricorda le mie credenziali
+                                </label>
+                            </div>
+                            <!-- messaggio di fallimento login -->
+                            <div v-if="failureLogin != null && successLogin === ''" style="color: crimson; margin-bottom: 1rem; font-size: 13px;">
+                                {{failureLogin }}
+                            </div>
+                            <!-- messaggio di successo login -->
+                            <div v-if="successLogin != null" style="color: green; margin-bottom: 1rem; font-size: 13px;">
+                                {{successLogin }}
+                            </div>
+
+                            <button class="submitButton remB3" type="submit">Accedi › </button>
+                            
+                        </div>
+                    </form>
+                </main>
+
+                <footer>
+                    <div class="reservedRights">
+                        <span>Tutti i diritti riservati • Demo Soluzione FAD 2024
+                            • by <a href="https://soluzionefad.it/">Soluzione FAD</a></span>
+                    </div>
+
+                    <div class="footerList">
+                        <a href="https://demo.soluzionefad.it/contatti">Contatti</a>
+                        <a href="https://demo.soluzionefad.it/privacy">Privacy</a>
+                        <a href="https://guida.soluzionefad.it/guida-utente">Vai alla guida</a>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+</html>
